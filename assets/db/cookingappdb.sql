@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jul 16, 2025 at 04:26 PM
+-- Generation Time: Jul 19, 2025 at 03:08 AM
 -- Server version: 5.7.40
 -- PHP Version: 8.0.26
 
@@ -49,6 +49,20 @@ INSERT INTO `ca_allergies` (`allergy_ID`, `allergy_name`) VALUES
 (7, 'Fish'),
 (8, 'Sesame'),
 (0, 'None');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ca_favorites`
+--
+
+DROP TABLE IF EXISTS `ca_favorites`;
+CREATE TABLE IF NOT EXISTS `ca_favorites` (
+  `user_id` int(11) NOT NULL,
+  `recipe_id` int(11) NOT NULL,
+  `favorite_id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`favorite_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -162,6 +176,31 @@ CREATE TABLE IF NOT EXISTS `ca_recipe_ingredients` (
 INSERT INTO `ca_recipe_ingredients` (`recipe_id`, `ingredient_id`, `quantity`, `unit`) VALUES
 (1, 19, 1, 'tbsp'),
 (1, 12, 1, 'Pound');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ca_users`
+--
+
+DROP TABLE IF EXISTS `ca_users`;
+CREATE TABLE IF NOT EXISTS `ca_users` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(30) NOT NULL DEFAULT '',
+  `email` varchar(50) NOT NULL,
+  `password_hash` text NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `ca_users`
+--
+
+INSERT INTO `ca_users` (`user_id`, `username`, `email`, `password_hash`, `created_date`) VALUES
+(1, 'Remnel', 'jacob.jorgensen92@gmail.com', '$2y$10$Lb3HJjMCso4.GJE14TTvZO2FzfDvxX/lenEmuINfYsrgeDUGm5aWq', '2025-07-19 03:06:40');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
