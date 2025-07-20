@@ -2,6 +2,7 @@
 $host = 'localhost';
 $db   = 'cookingappdb';
 $user = 'cooking_app_admin';
+//when phpmyadmin said this was a strong password...I don't know if that's true.  For an actual app I'd probably make something a lil bit more airtight.
 $pass = 'cooking_app_password';
 $charset = 'utf8mb4';
 
@@ -10,13 +11,16 @@ $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
+    PDO::ATTR_EMULATE_PREPARES   => false,];
 
-try {
+try 
+{
     $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (PDOException $e) {
+} 
+catch (PDOException $e) 
+{
     http_response_code(500);
+    //'You borkd it' isn't a very good error message.  I guess. 
     echo json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]);
     exit;
 }

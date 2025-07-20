@@ -12,13 +12,19 @@ switch ($method)
         $email = $_POST['email'] ?? null;
         $password = $_POST['password'] ?? null;
 
-        if ($username && $email && $password) {
-            if (createUser($username, $email, $password)) {
+        if ($username && $email && $password) 
+        {
+            if (createUser($username, $email, $password)) 
+            {
                 echo json_encode(['status' => 'success']);
-            } else {
+            } 
+            else 
+            {
                 echo json_encode(['error' => 'User creation failed.']);
             }
-        } else {
+        } 
+        else 
+        {
             echo json_encode(['error' => 'Missing fields.']);
         }
         break;
@@ -27,10 +33,13 @@ switch ($method)
         // Get user or all users
         $user_id = $_GET['user_id'] ?? null;
 
-        if ($user_id) {
+        if ($user_id) 
+        {
             $user = getUserById($user_id);
             echo json_encode($user ?: ['error' => 'User not found.']);
-        } else {
+        } 
+        else 
+        {
             $users = getAllUsers();
             echo json_encode($users);
         }
@@ -38,18 +47,26 @@ switch ($method)
 
     case 'PUT':
         // Update user
+        //parse file get contents to read the body of the http request.
+        //using put instead of post is cleaner for updates, but it does mean there isn't a post sent over for the function to read.
         parse_str(file_get_contents("php://input"), $data);
         $user_id = $data['user_id'] ?? null;
         $username = $data['username'] ?? null;
         $email = $data['email'] ?? null;
 
-        if ($user_id && $username && $email) {
-            if (updateUser($user_id, $username, $email)) {
+        if ($user_id && $username && $email) 
+        {
+            if (updateUser($user_id, $username, $email)) 
+            {
                 echo json_encode(['status' => 'updated']);
-            } else {
+            } 
+            else 
+            {
                 echo json_encode(['error' => 'Update failed.']);
             }
-        } else {
+        } 
+        else 
+        {
             echo json_encode(['error' => 'Missing fields.']);
         }
         break;
@@ -59,9 +76,12 @@ switch ($method)
         parse_str(file_get_contents("php://input"), $data);
         $user_id = $data['user_id'] ?? null;
 
-        if ($user_id && deleteUser($user_id)) {
+        if ($user_id && deleteUser($user_id)) 
+        {
             echo json_encode(['status' => 'deleted']);
-        } else {
+        } 
+        else 
+        {
             echo json_encode(['error' => 'Delete failed or missing user_id.']);
         }
         break;

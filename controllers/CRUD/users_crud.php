@@ -1,7 +1,8 @@
 <?php
 require_once __DIR__ . '/db.php';
 // Create a new user
-function createUser($username, $email, $password_plaintext) {
+function createUser($username, $email, $password_plaintext) 
+{
     global $pdo;
 
     $password_hash = password_hash($password_plaintext, PASSWORD_DEFAULT);
@@ -11,7 +12,8 @@ function createUser($username, $email, $password_plaintext) {
 }
 
 // Get a user by ID
-function getUserById($user_id) {
+function getUserById($user_id) 
+{
     global $pdo;
     $stmt = $pdo->prepare("SELECT user_id, username, email, created_date FROM ca_users WHERE user_id = ?");
     $stmt->execute([$user_id]);
@@ -19,21 +21,24 @@ function getUserById($user_id) {
 }
 
 // Get all users
-function getAllUsers() {
+function getAllUsers() 
+{
     global $pdo;
     $stmt = $pdo->query("SELECT user_id, username, email, created_date FROM ca_users");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 // Update user email or username
-function updateUser($user_id, $username, $email) {
+function updateUser($user_id, $username, $email) 
+{
     global $pdo;
     $stmt = $pdo->prepare("UPDATE ca_users SET username = ?, email = ? WHERE user_id = ?");
     return $stmt->execute([$username, $email, $user_id]);
 }
 
 // Delete a user
-function deleteUser($user_id) {
+function deleteUser($user_id) 
+{
     global $pdo;
     $stmt = $pdo->prepare("DELETE FROM ca_users WHERE user_id = ?");
     return $stmt->execute([$user_id]);
