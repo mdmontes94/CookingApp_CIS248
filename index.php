@@ -1,41 +1,60 @@
 <?php
-// Start the session once globally
 session_start();
 
-// Include the database and controller
 require_once 'config/database.php';
 require_once 'controllers/UserController.php';
+require_once 'controllers/RecipeController.php';
+require_once 'models/RecipeModel.php';
 
-// Get action from query string or fallback to home
+// Get the action from query string
 $action = $_GET['action'] ?? 'home';
 
-// Instantiate the controller
-$controller = new UserController();
+// Instantiate controllers
+$userController = new UserController();
+$recipeController = new RecipeController();
 
-// Route to correct method or view
+// Routing logic
 switch ($action) {
+    // --- User Actions ---
     case 'login':
-        $controller->showLogin();
+        $userController->showLogin();
         break;
     case 'loginSubmit':
-        $controller->login();
+        $userController->login();
         break;
     case 'signup':
-        $controller->showSignup();
+        $userController->showSignup();
         break;
     case 'signupSubmit':
-        $controller->signup();
+        $userController->signup();
         break;
     case 'account':
-        $controller->account();
+        $userController->account();
         break;
     case 'logout':
-        $controller->logout();
+        $userController->logout();
         break;
+
+    // --- Recipe Actions ---
+    case 'recipe_day': // View recipe of the day
+        $recipeController->daily();
+        break;
+    case 'recipes': // All recipes (optional future)
+        $recipeController->index();
+        break;
+    case 'view_recipe': // View recipe by ID
+        if (isset($_GET['id'])) {
+            $recipeController->view($_GET['id']);
+        } else {
+            header("Location: index.php?action=recipes");
+        }
+        break;
+
+    // --- Home (with recipe of the day) ---
     case 'home':
     default:
-        include 'views/main_page.php'; 
+        $recipeModel = new RecipeModel($pdo);
+        $recipeOfTheDay = $recipeModel->getRandomRecipe();
+        include 'views/main_page.php';
         break;
 }
-
-

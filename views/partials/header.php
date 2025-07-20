@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cooking App</title>
+    <title>MatchaMeal</title>
     <link rel="stylesheet" href="assets/css/site.css">
     <script>
         function toggleMenu() {
@@ -20,12 +20,33 @@ if (session_status() === PHP_SESSION_NONE) {
 $current = $_GET['action'] ?? 'home';
 ?>
 
-<!-- Hamburger menu (mobile only) -->
-<button class="hamburger" onclick="toggleMenu()" aria-label="Toggle navigation"></button>
+<!-- Top Header Bar -->
+<div class="topBar">
+    <!-- Hamburger menu -->
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle navigation"></button>
 
-<!-- Navigation -->
+    <!-- Logo center -->
+    <div class="nav-brand">
+        <a href="index.php">
+            <img src="assets/images/matchameal-logo.png" alt="MatchaMeal logo" class="logo">
+        </a>
+    </div>
+
+    <!-- Auth links -->
+    <div class="authLinks">
+        <?php if (isset($_SESSION['user'])): ?>
+            <a href="index.php?action=account" class="auth-button">Account</a>
+        <?php else: ?>
+            <a href="index.php?action=login" class="auth-button">Get Started</a>
+        <?php endif; ?>
+    </div>
+
+</div>
+
+<!-- Navigation Menu -->
 <nav id="navMenu" class="navMenu collapsed">
     <a href="index.php" class="<?= $current === 'home' ? 'active' : '' ?>">Home</a>
+    <a href="index.php?action=recipe_day" class="<?= $current === 'daily' ? 'active' : '' ?>">Recipe of the Day</a>
     <a href="index.php?action=account" class="<?= $current === 'account' ? 'active' : '' ?>">My Account</a>
     <?php if (isset($_SESSION['user'])): ?>
         <a href="index.php?action=logout">Logout</a>

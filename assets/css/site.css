@@ -1,5 +1,4 @@
 /* --- Base Styles (Mobile First) --- */
-
 body {
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
@@ -23,10 +22,35 @@ h1 {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     overflow: hidden;
+    text-align: center;
 }
 
-/* --- Navigation --- */
+/* --- Header Top Bar --- */
+.topBar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #333;
+    padding: 10px 15px;
+    color: #f2f2f2;
+    position: relative;
+}
 
+/* Brand logo */
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    height: 60px;
+    width: auto;
+    vertical-align: middle;
+    margin: 0 auto;
+}
+
+/* Hamburger */
 .hamburger {
     background: url('../images/navicon.png') no-repeat center center;
     background-size: contain;
@@ -35,14 +59,44 @@ h1 {
     height: 40px;
     cursor: pointer;
     padding: 0;
-    margin: 10px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    margin: 0;
     color: transparent;
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
-/* Nav menu styles */
+/* Auth buttons */
+.authLinks {
+    display: flex;
+    gap: 10px;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.auth-button {
+    background-color: #f2f2f2;
+    color: #333;
+    padding: 8px 14px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 4px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.2s ease;
+}
+
+.auth-button:hover {
+    background-color: #ddd;
+    color: #000;
+}
+
+/* --- Navigation Menu --- */
 .navMenu {
     background-color: #333;
     flex-direction: column;
@@ -56,7 +110,6 @@ h1 {
     transition: max-height 0.4s ease, opacity 0.4s ease;
 }
 
-/* Expanded menu state */
 .navMenu:not(.collapsed) {
     max-height: 500px;
     opacity: 1;
@@ -109,26 +162,38 @@ footer {
         padding: 20px;
     }
 
-    .hamburger {
-        display: none;
+    .topBar {
+        justify-content: flex-start;
+        gap: 40px;
+    }
+
+    .nav-brand {
+        justify-content: flex-start;
+        flex: none;
     }
 
     .navMenu {
-        display: flex !important;
         flex-direction: row;
-        justify-content: center;
-        max-height: none !important;
+        display: flex !important;
         opacity: 1 !important;
+        max-height: none !important;
+        background-color: transparent;
+        gap: 10px;
+        margin: 0;
     }
 
     .navMenu a {
-        border-bottom: none;
-        border-right: 1px solid #444;
-        padding: 14px 20px;
-        text-align: center;
+        border: none;
+        padding: 10px 14px;
+        color: #f2f2f2;
     }
 
-    .navMenu a:last-child {
-        border-right: none;
+    .authLinks {
+        position: absolute;
+        right: 20px;
+    }
+
+    .hamburger {
+        display: none;
     }
 }
