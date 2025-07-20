@@ -1,0 +1,115 @@
+
+
+/* --- Base Styles (Mobile First) --- */
+
+body {
+    font-family: Arial, sans-serif;
+    /*background-image:  */
+    margin: 0;
+    padding: 0;
+    color: #333;
+    font-size: 16px;
+}
+
+h1 {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.container {
+    padding: 15px;
+    margin: 10px auto;
+    max-width: 100%; /* full width on mobile */
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* --- Navigation --- */
+
+.navMenu {
+    background-color: #333;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;  /* vertical nav on mobile */
+    position: relative;
+}
+
+.navMenu a {
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #f2f2f2;
+    border-bottom: 1px solid #444;
+    text-align: left;
+}
+
+.navMenu a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+/* Hide menu by default when toggled (for hamburger) */
+.navMenu.collapsed {
+    display: none;
+}
+
+/* Hamburger Icon using your navicon.png */
+.hamburger {
+    background: url('../images/navicon.png') no-repeat center center;
+    background-size: contain;
+    border: none;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    padding: 0;
+    margin: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: transparent; /* hides any text */
+}
+
+/* --- Larger screens (tablet/desktop) --- */
+@media (min-width: 768px) {
+
+    body {
+        font-size: 18px;
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+    }
+
+    /* Show nav menu always and horizontal */
+    .navMenu {
+        display: flex !important;
+        flex-direction: row;
+        justify-content: center;
+        padding: 10px 0;
+    }
+
+    .navMenu a {
+        border-bottom: none;
+        border-right: 1px solid #444;
+        padding: 14px 20px;
+        text-align: center;
+    }
+
+    .navMenu a:last-child {
+        border-right: none;
+    }
+
+    /* Hide hamburger on larger screens */
+    .hamburger {
+        display: none;
+    }
+}
