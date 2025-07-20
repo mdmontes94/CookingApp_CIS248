@@ -48,6 +48,23 @@
         <input type="number" name="cook_time" placeholder="New Cook Time"><br>
         <button type="submit">Update</button>
     </form>
+    
+    <h2>Filter Recipes</h2>
+    <form method="GET" action="../recipes_search_api.php">
+        <label>Ingredient IDs (comma separated):</label><br>
+        <input type="text" name="ingredients" placeholder="ID's only"><br><br>
+        <label>Exclude Ingredient?</label>
+        <input type="checkbox" name="exclude_ingredient" value="1"><br><br>
 
+        <label>Allergy to Exclude:</label><br>
+        <input type="text" name="allergy_filter" placeholder="ID check"><br><br>
+
+        <label>Category:</label><br>
+        <input type="text" name="category_filter" placeholder="IDs again"><br><br>
+        <label>Exclude Category?</label>
+        <input type="checkbox" name="exclude_category" value="1"><br><br>
+
+        <input type="submit" value="Search Recipes">
+    </form>
 </body>
 </html>

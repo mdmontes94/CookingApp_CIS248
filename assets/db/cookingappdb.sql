@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jul 19, 2025 at 03:08 AM
+-- Generation Time: Jul 20, 2025 at 08:07 PM
 -- Server version: 5.7.40
 -- PHP Version: 8.0.26
 
@@ -98,38 +98,43 @@ INSERT INTO `ca_ingcategory` (`ing_cat_id`, `ing_cat_name`) VALUES
 
 DROP TABLE IF EXISTS `ca_ingredients`;
 CREATE TABLE IF NOT EXISTS `ca_ingredients` (
-  `Ing_ID` int(11) NOT NULL,
+  `Ing_ID` int(11) NOT NULL AUTO_INCREMENT,
   `Ing_Name` varchar(30) NOT NULL,
   `Ing_Allergy` int(11) NOT NULL,
   `Ing_category` int(11) NOT NULL,
   PRIMARY KEY (`Ing_ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `ca_ingredients`
 --
 
 INSERT INTO `ca_ingredients` (`Ing_ID`, `Ing_Name`, `Ing_Allergy`, `Ing_category`) VALUES
-(0, 'Milk', 9, 2),
-(1, 'Flour', 4, 0),
-(2, 'Butter', 9, 6),
-(3, 'Egg', 1, 5),
-(4, 'Rice', 0, 0),
-(5, 'Onion', 0, 3),
-(6, 'Sugar', 0, 1),
-(7, 'Salt', 0, 1),
-(8, 'Tomato', 0, 4),
-(9, 'Pepper', 0, 1),
-(10, 'Lemon', 0, 4),
-(11, 'Chicken Breast', 0, 5),
-(12, 'Ground Beef', 0, 5),
-(13, 'Sausage', 0, 5),
-(14, 'White Rice', 0, 0),
-(15, 'White Bread', 4, 0),
-(16, 'Peanut Butter', 2, 5),
-(17, 'Corn', 0, 3),
-(18, 'Potato', 0, 3),
-(19, 'Garlic', 0, 3);
+(1, 'Milk', 9, 2),
+(2, 'Flour', 4, 0),
+(3, 'Butter', 9, 6),
+(4, 'Egg', 1, 5),
+(5, 'Rice', 0, 0),
+(6, 'Onion', 0, 3),
+(7, 'Sugar', 0, 1),
+(8, 'Salt', 0, 1),
+(9, 'Tomato', 0, 4),
+(10, 'Pepper', 0, 1),
+(11, 'Lemon', 0, 4),
+(12, 'Chicken Breast', 0, 5),
+(13, 'Ground Beef', 0, 5),
+(14, 'Sausage', 0, 5),
+(15, 'White Rice', 0, 0),
+(16, 'White Bread', 4, 0),
+(17, 'Peanut Butter', 2, 5),
+(18, 'Corn', 0, 3),
+(19, 'Potato', 0, 3),
+(20, 'Garlic', 0, 3),
+(21, 'Beef Chuck', 0, 5),
+(22, 'Yellow Onion', 0, 3),
+(23, 'Carrot', 0, 3),
+(24, 'Worcestershire Sauce', 0, 1),
+(25, 'Tomato Paste', 0, 3);
 
 -- --------------------------------------------------------
 
@@ -144,16 +149,17 @@ CREATE TABLE IF NOT EXISTS `ca_recipes` (
   `ingredients` int(11) NOT NULL COMMENT 'FK to recipe_ingredients',
   `instructions` varchar(2000) NOT NULL,
   `difficulty` int(11) NOT NULL,
-  `cook_time` int(11) NOT NULL,
+  `cook_time` varchar(11) NOT NULL,
   PRIMARY KEY (`recipe_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `ca_recipes`
 --
 
 INSERT INTO `ca_recipes` (`recipe_id`, `name`, `ingredients`, `instructions`, `difficulty`, `cook_time`) VALUES
-(1, 'Burgers', 0, 'Mix seasonings and raw beef and then form into patties.  Preheat skillet with oil and then place the patties onto it and cook until they\'re as done as you desire. Place them on the bun with toppings and serve.', 1, 15);
+(1, 'Burgers', 0, 'Mix seasonings and raw beef and then form into patties.  Preheat skillet with oil and then place the patties onto it and cook until they\'re as done as you desire. Place them on the bun with toppings and serve.', 1, '15 Minutes'),
+(2, 'Easy Beef Stew', 1, 'Preheat oven to 325° F.\r\n1. Chop carrots, potatoes, and onions\r\n2. Season the beef chunks with salt and pepper.  Sprinkle the flour over and toss the seasoned beef to coat it on all sides.\r\n3. Heat the olive oil in a skillet over medium heat.  Brown the beef on all sides for 3-4 minutes.\r\n4. Add the onions, garlic, and carrots over the beef.\r\n5. Cook everything for 2-3 or until lightly browned.\r\n6. add the potatoes, beef broth, tomato paste, bay leaf, thyme, and Worcestershire sauce to a pot.\r\n7. Bring the mixture to a simmer and return the beef to it.\r\n8. Cover the pot and place it into the oven.  Cook for 2-2.5 hours.  Taste and season with salt and pepper if needed.', 1, '2 Hours');
 
 -- --------------------------------------------------------
 
@@ -174,8 +180,21 @@ CREATE TABLE IF NOT EXISTS `ca_recipe_ingredients` (
 --
 
 INSERT INTO `ca_recipe_ingredients` (`recipe_id`, `ingredient_id`, `quantity`, `unit`) VALUES
-(1, 19, 1, 'tbsp'),
-(1, 12, 1, 'Pound');
+(2, 10, 1, 'tbsp'),
+(2, 8, 1, 'tbsp'),
+(2, 21, 1, 'Pound'),
+(1, 24, 1, 'tbsp'),
+(1, 6, 0.5, 'Cups'),
+(1, 8, 1, 'tsp'),
+(1, 10, 1, 'tsp'),
+(1, 20, 1, 'Clove'),
+(1, 13, 1, 'Pound'),
+(2, 2, 1, 'Cup'),
+(2, 22, 1, 'Cup'),
+(2, 23, 1, 'Cup'),
+(2, 19, 1, 'cup'),
+(2, 24, 1, 'tbsp'),
+(2, 25, 2, 'Cups');
 
 -- --------------------------------------------------------
 
