@@ -8,7 +8,7 @@
     <?php endif; ?>
 
     <form method="post" action="index.php?action=signupSubmit">
-        <label for="name">Name:</label><br>
+        <label for="name">Username:</label><br>
         <input type="text" id="name" name="name" required><br><br>
 
         <label for="email">Email:</label><br>
@@ -23,7 +23,11 @@
         <button type="submit">Sign Up</button>
     </form>
 
-    <p>Already have an account? <a href="index.php?action=login">Login here</a>.</p>
+    <div style="margin-top: 30px; text-align: center;">
+        <p>Already have an account?</p>
+        <a href="index.php?action=login" class="auth-button">Log In</a>
+    </div>
+
 </div>
 
 <?php include 'views/partials/footer.php'; ?>

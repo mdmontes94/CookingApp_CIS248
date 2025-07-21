@@ -17,7 +17,16 @@
         <button type="submit">Login</button>
     </form>
 
-    <p>Don't have an account? <a href="index.php?action=signup">Sign up here</a>.</p>
+    <div style="margin-top: 30px; text-align: center;">
+        <h3>New here?</h3>
+        <p>By creating an account, you can:</p>
+        <ul style="list-style: none; padding-left: 0;">
+            <li>✅ Save your favorite recipes</li>
+            <li>✅ Track ingredients in your pantry</li>
+            <li>✅ Get personalized recipe matches</li>
+        </ul>
+        <p><a href="index.php?action=signup" class="auth-button">Create Account</a></p>
+    </div>
 </div>
 
 <?php include 'views/partials/footer.php'; ?>
