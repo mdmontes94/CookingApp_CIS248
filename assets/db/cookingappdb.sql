@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jul 20, 2025 at 08:07 PM
+-- Generation Time: Jul 21, 2025 at 03:35 AM
 -- Server version: 5.7.40
 -- PHP Version: 8.0.26
 
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `ca_ingredients` (
   `Ing_Allergy` int(11) NOT NULL,
   `Ing_category` int(11) NOT NULL,
   PRIMARY KEY (`Ing_ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `ca_ingredients`
@@ -134,7 +134,9 @@ INSERT INTO `ca_ingredients` (`Ing_ID`, `Ing_Name`, `Ing_Allergy`, `Ing_category
 (22, 'Yellow Onion', 0, 3),
 (23, 'Carrot', 0, 3),
 (24, 'Worcestershire Sauce', 0, 1),
-(25, 'Tomato Paste', 0, 3);
+(25, 'Tomato Paste', 0, 3),
+(26, 'Chicken Broth', 0, 5),
+(27, 'Pie Crust', 4, 0);
 
 -- --------------------------------------------------------
 
@@ -149,9 +151,9 @@ CREATE TABLE IF NOT EXISTS `ca_recipes` (
   `ingredients` int(11) NOT NULL COMMENT 'FK to recipe_ingredients',
   `instructions` varchar(2000) NOT NULL,
   `difficulty` int(11) NOT NULL,
-  `cook_time` varchar(11) NOT NULL,
+  `cook_time` varchar(30) NOT NULL,
   PRIMARY KEY (`recipe_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `ca_recipes`
@@ -159,7 +161,8 @@ CREATE TABLE IF NOT EXISTS `ca_recipes` (
 
 INSERT INTO `ca_recipes` (`recipe_id`, `name`, `ingredients`, `instructions`, `difficulty`, `cook_time`) VALUES
 (1, 'Burgers', 0, 'Mix seasonings and raw beef and then form into patties.  Preheat skillet with oil and then place the patties onto it and cook until they\'re as done as you desire. Place them on the bun with toppings and serve.', 1, '15 Minutes'),
-(2, 'Easy Beef Stew', 1, 'Preheat oven to 325° F.\r\n1. Chop carrots, potatoes, and onions\r\n2. Season the beef chunks with salt and pepper.  Sprinkle the flour over and toss the seasoned beef to coat it on all sides.\r\n3. Heat the olive oil in a skillet over medium heat.  Brown the beef on all sides for 3-4 minutes.\r\n4. Add the onions, garlic, and carrots over the beef.\r\n5. Cook everything for 2-3 or until lightly browned.\r\n6. add the potatoes, beef broth, tomato paste, bay leaf, thyme, and Worcestershire sauce to a pot.\r\n7. Bring the mixture to a simmer and return the beef to it.\r\n8. Cover the pot and place it into the oven.  Cook for 2-2.5 hours.  Taste and season with salt and pepper if needed.', 1, '2 Hours');
+(2, 'Easy Beef Stew', 1, 'Preheat oven to 325° F.\r\n1. Chop carrots, potatoes, and onions\r\n2. Season the beef chunks with salt and pepper.  Sprinkle the flour over and toss the seasoned beef to coat it on all sides.\r\n3. Heat the olive oil in a skillet over medium heat.  Brown the beef on all sides for 3-4 minutes.\r\n4. Add the onions, garlic, and carrots over the beef.\r\n5. Cook everything for 2-3 or until lightly browned.\r\n6. add the potatoes, beef broth, tomato paste, bay leaf, thyme, and Worcestershire sauce to a pot.\r\n7. Bring the mixture to a simmer and return the beef to it.\r\n8. Cover the pot and place it into the oven.  Cook for 2-2.5 hours.  Taste and season with salt and pepper if needed.', 1, '2 Hours'),
+(5, 'Chicken Pot Pie', 3, '1. Cook and shred the chicken.  Press your pie crust into the bottom of a pie plate.\r\n2.  Melt butter in a saucepan over medium heat.  Add chopped onion and cook until it\'s translucent.  Whisk in flour, salt, and pepper until thick then gradually add in broth and milk while stirring until thick.\r\n3. Stir in the chicken and vegetables.  Pour into the pie crust and then cover the top with another crust.  Pinch the edges together and cut vents in the top.\r\n4. Bake at 425 for 30-40 minutes or until the crust is golden brown.  Let stand for 5 minutes.', 3, '1 hour 5 Minutes');
 
 -- --------------------------------------------------------
 
@@ -194,7 +197,20 @@ INSERT INTO `ca_recipe_ingredients` (`recipe_id`, `ingredient_id`, `quantity`, `
 (2, 23, 1, 'Cup'),
 (2, 19, 1, 'cup'),
 (2, 24, 1, 'tbsp'),
-(2, 25, 2, 'Cups');
+(2, 25, 2, 'Cups'),
+(3, 27, 1, 'Box'),
+(3, 3, 0.75, 'Cup'),
+(3, 6, 0.75, 'Cup'),
+(3, 2, 0.75, 'Cup'),
+(3, 8, 0.5, 'tsp'),
+(3, 10, 0.25, 'tsp'),
+(3, 26, 1.75, 'Cup'),
+(3, 1, 0.5, 'Cup'),
+(3, 12, 2.5, 'Cups'),
+(3, 6, 0.5, 'Cup'),
+(3, 20, 0.5, 'tbsp'),
+(3, 18, 0.5, 'Cup'),
+(3, 10, 0.25, 'Cup');
 
 -- --------------------------------------------------------
 
