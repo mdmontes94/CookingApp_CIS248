@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jul 21, 2025 at 03:40 AM
+-- Generation Time: Jul 21, 2025 at 04:02 AM
 -- Server version: 5.7.40
 -- PHP Version: 8.0.26
 
@@ -236,6 +236,20 @@ CREATE TABLE IF NOT EXISTS `ca_users` (
 
 INSERT INTO `ca_users` (`user_id`, `username`, `email`, `password_hash`, `created_date`) VALUES
 (1, 'Remnel', 'jacob.jorgensen92@gmail.com', '$2y$10$Lb3HJjMCso4.GJE14TTvZO2FzfDvxX/lenEmuINfYsrgeDUGm5aWq', '2025-07-19 03:06:40');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ca_user_pantry`
+--
+
+DROP TABLE IF EXISTS `ca_user_pantry`;
+CREATE TABLE IF NOT EXISTS `ca_user_pantry` (
+  `entry_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `ingredient_id` int(11) NOT NULL,
+  PRIMARY KEY (`entry_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
