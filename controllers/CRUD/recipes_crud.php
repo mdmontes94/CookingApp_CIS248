@@ -68,7 +68,7 @@ function getIngredientsForRecipe($recipe_id) {
     global $pdo;
     
     $sql = "
-        SELECT i.ing_name, ri.quantity, ri.unit
+        SELECT i.ing_ID AS ingredient_id, i.ing_name, ri.quantity, ri.unit
         FROM ca_recipe_ingredients ri
         JOIN ca_ingredients i ON ri.ingredient_id = i.ing_ID
         WHERE ri.recipe_id = ?
@@ -78,9 +78,13 @@ function getIngredientsForRecipe($recipe_id) {
     $stmt->execute([$recipe_id]);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    return array_map(function($row) 
-    {
-        return "{$row['quantity']} {$row['unit']} {$row['ing_name']}";
+    return array_map(function($row) {
+        return [
+            'ingredient_id' => $row['ingredient_id'],
+            'name' => $row['ing_name'],
+            'unit' => $row['unit'],
+            'quantity' => $row['quantity']
+        ];
     }, $rows);
 }
 
@@ -88,41 +92,22 @@ function getIngredientsForRecipe($recipe_id) {
 function searchRecipesWithFilters($ingredient_ids = [], $allergy_filter = null, $category_filter = [], $exclude_category = false, $exclude_ingredient = false) {
     global $pdo;
 
-    $sql = "
-        SELECT DISTINCT r.*
-        FROM ca_recipes r
-        WHERE 1 = 1
-    ";
-
+    $sql = "SELECT DISTINCT r.* FROM ca_recipes r WHERE 1 = 1";
     $params = [];
 
-    // Ingredient filter: require all specified ingredients to be present in the recipe
-    if (!empty($ingredient_ids)) 
-    {
-        foreach ($ingredient_ids as $id) 
-        {
-            if($exclude_ingredient)
-            {
-                $sql .= " AND NOT EXISTS (
-                    SELECT 1 FROM ca_recipe_ingredients ri
-                    WHERE ri.recipe_id = r.recipe_id AND ri.ingredient_id = ?
-                )";
-                $params[] = $id;
-            }
-            else
-            {
-                $sql .= " AND EXISTS (
-                    SELECT 1 FROM ca_recipe_ingredients ri
-                    WHERE ri.recipe_id = r.recipe_id AND ri.ingredient_id = ?
-                )";
-                $params[] = $id;
-            }
-        }
+    // Filter recipes that contain any of the selected ingredients
+    if (!empty($ingredient_ids)) {
+        $placeholders = rtrim(str_repeat('?,', count($ingredient_ids)), ',');
+        $sql .= " AND r.recipe_id IN (
+            SELECT recipe_id FROM ca_recipe_ingredients
+            WHERE ingredient_id IN ($placeholders)
+            GROUP BY recipe_id
+        )";
+        $params = array_merge($params, $ingredient_ids);
     }
 
-    // Allergy filter: exclude recipes that contain ingredients with this allergy
-    if (!empty($allergy_filter)) 
-    {
+    // Allergy exclusion filter
+    if (!empty($allergy_filter)) {
         $sql .= " AND r.recipe_id NOT IN (
             SELECT ri.recipe_id
             FROM ca_recipe_ingredients ri
@@ -132,29 +117,21 @@ function searchRecipesWithFilters($ingredient_ids = [], $allergy_filter = null, 
         $params[] = "%$allergy_filter%";
     }
 
-    // Category filter: include or exclude based on category ID
-    if (!empty($category_filter)) 
-    {
-        if (!is_array($category_filter)) 
-        {
-            $category_filter = explode(',', $category_filter); // If passed as comma-separated string
+    // Category inclusion/exclusion
+    if (!empty($category_filter)) {
+        if (!is_array($category_filter)) {
+            $category_filter = explode(',', $category_filter);
         }
         $placeholders = rtrim(str_repeat('?,', count($category_filter)), ',');
 
-        if ($exclude_category) 
-        {
-            // Exclude any recipe that uses one of these categories.  This might be a bit broad right now since the categories are "protein" and "vegetable"
+        if ($exclude_category) {
             $sql .= " AND r.recipe_id NOT IN (
                 SELECT ri.recipe_id
                 FROM ca_recipe_ingredients ri
                 JOIN ca_ingredients i ON ri.ingredient_id = i.ing_ID
                 WHERE i.ing_category IN ($placeholders)
             )";
-        } 
-        else 
-        {
-            // Only include recipes that contain at least one ingredient in the category
-            //Again pretty broad, but better. "include only recipes that have protein" makes a little bit more sense. 
+        } else {
             $sql .= " AND r.recipe_id IN (
                 SELECT ri.recipe_id
                 FROM ca_recipe_ingredients ri
@@ -169,11 +146,31 @@ function searchRecipesWithFilters($ingredient_ids = [], $allergy_filter = null, 
     $stmt->execute($params);
     $recipes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Adds readable ingredient names instead of just displaying IDs 
-    foreach ($recipes as &$recipe) 
-    {
+    // Enrich with ingredients and calculate match %
+    foreach ($recipes as &$recipe) {
         $recipe['ingredients'] = getIngredientsForRecipe($recipe['recipe_id']);
+
+        if (!empty($ingredient_ids)) {
+            $stmt = $pdo->prepare("SELECT ingredient_id FROM ca_recipe_ingredients WHERE recipe_id = ?");
+            $stmt->execute([$recipe['recipe_id']]);
+            $recipeIngIds = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+            $matches = array_intersect($ingredient_ids, $recipeIngIds);
+            $matchPercent = count($recipeIngIds) > 0
+                ? round((count($matches) / count($recipeIngIds)) * 100)
+                : 0;
+
+            $recipe['match_percent'] = $matchPercent;
+        }
+    }
+
+    // Sort by best match
+    if (!empty($ingredient_ids)) {
+        usort($recipes, function ($a, $b) {
+            return ($b['match_percent'] ?? 0) <=> ($a['match_percent'] ?? 0);
+        });
     }
 
     return $recipes;
 }
+

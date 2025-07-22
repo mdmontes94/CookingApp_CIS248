@@ -1,5 +1,4 @@
 <?php
-
 class UserModel {
 
     private $db;
@@ -48,5 +47,3 @@ class UserModel {
         return $stmt->execute([$user_id]);
     }
 }
-
-?>
