@@ -2,21 +2,26 @@
 
 <?php if (!empty($recipe)): ?>
     <div class="container">
+        <?php if (isset($_SESSION['user']['id'])): ?>
+            <?php if ($favorited): ?>
+            <a href="index.php?action=favorite_remove&recipe_id=<?= $recipe['recipe_id'] ?>" class="auth-button" style="background-color: #e74c3c;">★ Unfavorite</a>
+            <?php else: ?>
+            <a href="index.php?action=favorite_add&recipe_id=<?= $recipe['recipe_id'] ?>" class="auth-button">☆ Add to Favorites</a>
+            <?php endif; ?>
+        <?php endif; ?>
+
         <h1><?= htmlspecialchars($recipe['name']) ?></h1>
         <p><strong>Difficulty:</strong> <?= htmlspecialchars($recipe['difficulty']) ?> | 
-           <strong>Cook Time:</strong> <?= htmlspecialchars($recipe['cook_time']) ?> minutes</p>
+           <strong>Cook Time:</strong> <?= htmlspecialchars($recipe['cook_time']) ?></p>
 
         <h3>Ingredients</h3>
         <?php if (!empty($ingredients)): ?>
-        <ul>
-            <?php foreach ($ingredients as $ingredient): ?>
-                <li>
-                    <?= htmlspecialchars($ingredient['quantity']) ?>
-                    <?= htmlspecialchars($ingredient['unit']) ?>
-                    <?= htmlspecialchars($ingredient['ingredient_name']) ?>
-                </li>
-            <?php endforeach; ?>
-        </ul>
+            <ul class="no-bullets">
+                <?php foreach ($recipe['ingredients'] as $ingredient): ?>
+                <li><?= htmlspecialchars("{$ingredient['quantity']} {$ingredient['unit']} {$ingredient['name']}") ?></li>
+                <?php endforeach; ?>
+            </ul>
+
         <?php else: ?>
         <p>No ingredients listed for this recipe.</p>
         <?php endif; ?>
