@@ -1,7 +1,7 @@
 <?php
 
 require_once 'models/UserModel.php';
-require_once 'config/database.php'; // pulls in $pdo
+require_once 'config/database.php';
 
 class UserController {
 
@@ -19,22 +19,24 @@ class UserController {
 
     // Handle login submission
     public function login() {
-        $email = trim($_POST['email'] ?? '');
-        $password = $_POST['password'] ?? '';
-        $user = $this->userModel->getUserByEmail($email);
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $user = $this->userModel->getUserByEmail($email);
 
-        if ($user && password_verify($password, $user['password_hash'])) {
-            $_SESSION['user'] = [
-                'id' => $user['user_id'],
-                'name' => $user['username'],
-                'email' => $user['email']
-            ];
-            header('Location: index.php?action=account');
-        } else {
-            $error = "Invalid email or password.";
-            include 'views/user/login.php';
-        }
+    if ($user && password_verify($password, $user['password_hash'])) {
+        $_SESSION['user'] = [
+            'id' => $user['user_id'],
+            'name' => $user['username'],
+            'email' => $user['email']
+        ];
+        $_SESSION['user_id'] = $user['user_id'];  // ✅ Set this for other logic
+        header('Location: index.php?action=account');
+    } else {
+        $error = "Invalid email or password.";
+        include 'views/user/login.php';
     }
+}
+
 
     // Show the signup form
     public function showSignup() {
@@ -77,7 +79,29 @@ class UserController {
             return;
         }
 
+        global $pdo;
+
         $user = $_SESSION['user'];
+        $userId = $user['id'];
+
+        require_once 'models/FavoriteModel.php';
+        require_once 'models/RecipeModel.php';
+        require_once 'models/PantryModel.php';
+
+        $favModel = new FavoriteModel($pdo);
+        $recipeModel = new RecipeModel($pdo);
+        $pantryModel = new PantryModel($pdo);
+
+        // Get favorite recipes
+        $favorites = $favModel->getFavoritesByUser($userId);
+        foreach ($favorites as &$fav) {
+            $recipe = $recipeModel->getRecipeById($fav['recipe_id']);
+            $fav['name'] = $recipe['name'] ?? 'Unknown';
+        }
+
+        // Get pantry ingredients
+        $pantryItems = $pantryModel->getPantryByUser($userId);
+
         include 'views/user/account.php';
     }
 
