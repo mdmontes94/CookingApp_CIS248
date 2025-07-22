@@ -1,56 +1,118 @@
 <?php
 session_start();
 
+// Core configuration
 require_once 'config/database.php';
+require_once 'models/RecipeModel.php';
 require_once 'controllers/UserController.php';
 require_once 'controllers/RecipeController.php';
-require_once 'models/RecipeModel.php';
+require_once 'controllers/IngredientController.php';
+require_once 'controllers/FavoriteController.php';
+require_once 'controllers/PantryController.php';
 
-// Get the action from query string
-$action = $_GET['action'] ?? 'home';
-
-// Instantiate controllers
+// Instantiate shared controllers
 $userController = new UserController();
 $recipeController = new RecipeController();
 
-// Routing logic
+// Determine action
+$action = $_GET['action'] ?? 'home';
+
 switch ($action) {
-    // --- User Actions ---
+
+    // --- User Authentication ---
     case 'login':
         $userController->showLogin();
         break;
+
     case 'loginSubmit':
         $userController->login();
         break;
+
     case 'signup':
         $userController->showSignup();
         break;
+
     case 'signupSubmit':
         $userController->signup();
         break;
-    case 'account':
-        $userController->account();
-        break;
+
     case 'logout':
         $userController->logout();
         break;
 
-    // --- Recipe Actions ---
-    case 'recipe_day': // View recipe of the day
-        $recipeController->daily();
+    case 'account':
+        $userController->account();
         break;
-    case 'recipes': // All recipes (optional future)
+
+    // --- Recipe Actions ---
+    case 'recipes':
         $recipeController->index();
         break;
-    case 'view_recipe': // View recipe by ID
-        if (isset($_GET['id'])) {
+
+    case 'recipe_day':
+        $recipeController->daily();
+        break;
+
+    case 'view_recipe':
+        if (!empty($_GET['id'])) {
             $recipeController->view($_GET['id']);
         } else {
             header("Location: index.php?action=recipes");
         }
         break;
 
-    // --- Home (with recipe of the day) ---
+    // --- Ingredient Actions ---
+    case 'find_recipe':
+        $ingredientController = new IngredientController();
+        $ingredientController->searchForm();
+        break;
+
+    case 'match_recipes':
+        $recipeController = new RecipeController();
+        $recipeController->matchRecipes();
+        break;
+
+
+    // --- Favorites ---
+    case 'favorite_add':
+    if (!empty($_GET['recipe_id']) && isset($_SESSION['user']['id'])) {
+        $favController = new FavoriteController();
+        $favController->add($_GET['recipe_id']);
+    } else {
+        header("Location: index.php?action=login");
+    }
+    break;
+
+    case 'favorite_remove':
+    if (!empty($_GET['recipe_id']) && isset($_SESSION['user']['id'])) {
+        $favController = new FavoriteController();
+        $favController->remove($_GET['recipe_id']);
+    } else {
+        header("Location: index.php?action=login");
+    }
+    break;
+
+
+    // --- Pantry ---
+    case 'add_to_pantry':
+        if (isset($_SESSION['user_id'])) {
+            $pantryController = new PantryController();
+            $pantryController->addToPantry();
+        } else {
+            echo "Not authorized.";
+        }
+        break;
+    case 'remove_pantry_item_ajax':
+        if (isset($_SESSION['user']['id'])) {
+            $pantryController = new PantryController();
+            $pantryController->removeFromPantryAjax();
+        } else {
+            echo "Unauthorized.";
+        }
+        break;
+
+
+    // --- Home (Default) ---
     case 'home':
     default:
         $recipeModel = new RecipeModel($pdo);
