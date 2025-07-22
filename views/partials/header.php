@@ -47,6 +47,7 @@ $current = $_GET['action'] ?? 'home';
 <nav id="navMenu" class="navMenu collapsed">
     <a href="index.php" class="<?= $current === 'home' ? 'active' : '' ?>">Home</a>
     <a href="index.php?action=recipe_day" class="<?= $current === 'daily' ? 'active' : '' ?>">Recipe of the Day</a>
+    <a href="index.php?action=find_recipe" class="<?= $current === 'find_recipe' ? 'active' : '' ?>">Find Recipes</a>
     <a href="index.php?action=account" class="<?= $current === 'account' ? 'active' : '' ?>">My Account</a>
     <?php if (isset($_SESSION['user'])): ?>
         <a href="index.php?action=logout">Logout</a>
